@@ -24,7 +24,6 @@ class Member:
             raise ValueError(
                 'Invalid value for mother. Mother should be female'
             )
-
         self.mother = mother
 
     def set_father(self, father):
@@ -34,7 +33,6 @@ class Member:
             raise ValueError(
                 'Invalid value for father. Father should be male'
             )
-
         self.father = father
 
     def set_spouse(self, spouse):
@@ -44,5 +42,9 @@ class Member:
             raise ValueError(
                 'Invalid gender for spouse. Spouse and Member cannot have same gender.'
             )
-
         self.spouse = spouse
+
+    def add_child(self, child):
+        if not isinstance(child, Member):
+            raise ValueError('Invalid value for child')
+        self.children.append(child)

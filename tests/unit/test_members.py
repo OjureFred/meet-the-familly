@@ -64,3 +64,16 @@ class TestMember(TestCase):
         self.member.set_spouse(spouse_demo_c)
         self.assertEqual(self.member.spouse.name, 'Wife')
         self.assertEqual(self.member.spouse.gender.value, 'Female')
+
+    def test_add_child(self):
+        child_demo_a = 'child_demo_a'
+        child_demo_b = Member(4, 'Daughter', 'Female')
+
+        # error case
+        self.assertRaises(ValueError, self.member.add_child, child_demo_a)
+
+        # success case
+        self.member.add_child(child_demo_b)
+        self.assertEqual(len(self.member.children), 1)
+        self.assertEqual(self.member.children[0].name, 'Daughter')
+        self.assertEqual(self.member.children[0].gender.value, 'Female')
