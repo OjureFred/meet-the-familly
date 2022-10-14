@@ -22,3 +22,17 @@ class TestMember(TestCase):
 
         # Test Edge case forgender
         self.assertRaises(ValueError, Member, 2, "SomeOtherPerson", 'Queer')
+
+    def test_set_mother(self):
+        mother_demo_a = 'mother_demo_a'
+        mother_demo_b = Member(2, 'MotherDemoB', 'Male')
+        mother_demo_c = Member(3, 'Mom', 'Female')
+
+        # error case
+        self.assertRaises(ValueError, self.member.set_mother, mother_demo_a)
+        self.assertRaises(ValueError, self.member.set_mother, mother_demo_b)
+
+        # Success cases
+        self.member.set_mother(mother_demo_c)
+        self.assertEqual(self.member.mother.name, 'Mom')
+        self.assertEqual(self.member.mother.gender.value, 'Female')
