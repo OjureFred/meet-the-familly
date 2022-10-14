@@ -50,3 +50,17 @@ class TestMember(TestCase):
         self.member.set_father(father_demo_c)
         self.assertEqual(self.member.father.name, 'Dad')
         self.assertEqual(self.member.father.gender.value, 'Male')
+
+    def test_set_spouse(self):
+        spouse_demo_a = 'spouse_demo_a'
+        spouse_demo_b = Member(4, 'SpouseDemoB', 'Male')
+        spouse_demo_c = Member(5, 'Wife', 'Female')
+
+        # error case
+        self.assertRaises(ValueError, self.member.set_spouse, spouse_demo_a)
+        self.assertRaises(ValueError, self.member.set_spouse, spouse_demo_b)
+
+        # Success cases
+        self.member.set_spouse(spouse_demo_c)
+        self.assertEqual(self.member.spouse.name, 'Wife')
+        self.assertEqual(self.member.spouse.gender.value, 'Female')

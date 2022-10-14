@@ -36,3 +36,13 @@ class Member:
             )
 
         self.father = father
+
+    def set_spouse(self, spouse):
+        if not isinstance(spouse, Member):
+            raise ValueError('Invalid value for spouse')
+        if self.gender == spouse.gender:
+            raise ValueError(
+                'Invalid gender for spouse. Spouse and Member cannot have same gender.'
+            )
+
+        self.spouse = spouse
