@@ -1,0 +1,63 @@
+CHILD ADDITON
+1. Cannot have duplicate names -> CHILD_ADDITION__FAILED
+2. If a tree is empty add -> CHILD_ADDITION_SUCCEEDED
+3. Cannot be added through father -> CHILD_ADDITION__FAILED
+4. Both father and mother need to exist -> PERSON_NOT_FOUND
+5. All cases succesful -> CHILD_ADDITION_SUCCEEDED
+
+SPOUSE ADDITION 
+1. Cannot have duplicate name -> SPOUSE_ADDITION_FAILED
+2. Cannot be added if tree is empty -> SPOUSE_ADDITION_FAILED
+3. Spouse needs to exist -> PERSON_NOT_FOUND
+4. Spouse gender need to be opposite -> SPOUSE_ADDITION_FAILED
+5. Spouse cannot have existing spouse -> SPOUSE_ADDITION_FAILED
+
+GET RELATIONSHIP NOTE:
+The names of people in the relationship need to be printed in order of their addition 
+1. Person should exist -> PERSON_NOT_FOUND
+2. Should return non empty list -> NONE
+
+CLASSES
+
+1. GENDER 
+
+data_members
+=============
+male = 'MALE'
+female = 'FEMALE'
+
+2. MEMBER 
+data_members
+=============
+id - Integer
+name - String
+gender - Enum Gender 
+mother - Member 
+father - Member 
+spouse - Member
+children - List<Member>
+
+methods
+=======
+get_paternal_aunt - params: None 
+get_paternal_uncle - params: None
+get_maternal_aunt - params: None
+get_maternal_aunt - params: None
+get brother_in_law - param: None
+get_sister_in_law - params: None
+get_son - params: None
+get_daughter - params: None
+get_siblings - params: None
+
+get_relationship - params: String relationship_type
+
+3. FAMILY TREE 
+data_members
+============
+family_tree - Dictionary
+
+Methods 
+======= 
+add_child - params: String name, String gender, String mother_name
+add_spouse - params: String name, String gender, String spouse_name 
+get_relationship - params: String name, String relationship_type
