@@ -1,8 +1,20 @@
 from unittest import TestCase
 from unittest.mock import patch, Mock
 
-from family_tree.member import Member
+from family_tree.member import Member, Gender
 
+def create_fake_member(id = None, name = None, gender = None, 
+    mother = None, spouse = None, father = None, children = None):
+
+    member = Mock()
+    member .id = id
+    member .name = name
+    member.gender = gender
+    member.mother = mother
+    member.spouse = spouse
+    member.father = father
+    member.children = children
+    return member
 
 class TestMember(TestCase):
 
@@ -122,11 +134,64 @@ class TestMember(TestCase):
         member.spouse.mother = spouse_mother
         self.assertEqual(member.get_spouse_mother(), spouse_mother)
 
-    @patch('family_tree.member.Member.get_paternal_grandmother', return_value='NONE')
+    @patch('family_tree.member.Member.get_paternal_grandmother', side_effect = [
+        None, 
+        create_fake_member(), 
+        create_fake_member(children =[Member(3, 'Dad', 'Male')]),
+        create_fake_member(children = [
+            Member(3, 'Dad', 'Male'), 
+            Member(4, 'Uncle', 'Male')]), 
+        create_fake_member(children = [ 
+            Member(3, 'Dad', 'Male'), 
+            Member(4, 'Uncle', 'Male'), 
+            Member(5, 'Aunt', 'Female')])
+        ])
     def test_get_paternal_aunt(self, mock_get_paternal_grandmother):
 
         #Check if get_paternal_grandmother has been replaced by a Mock object
         self.assertEqual(isinstance(self.member.get_paternal_grandmother, Mock), True)
 
         #Check for None value
-        self.assertEqual(self.member.get_paternal_grandmother(), 'NONE')
+        self.assertEqual(self.member.get_paternal_aunt(), [])
+        self.assertEqual(self.member.get_paternal_aunt(), [])
+        self.assertEqual(self.member.get_paternal_aunt(), [])
+        self.assertEqual(self.member.get_paternal_aunt(), [])
+
+        paternal_aunts = self.member.get_paternal_aunt()
+        self.assertEqual(len(paternal_aunts), 1)
+        self.assertEqual(paternal_aunts[0].name, 'Aunt')
+        self.assertEqual(paternal_aunts[0].gender, Gender.female)
+
+        #Check that mock_get_paternal_grandmother was called
+        mock_get_paternal_grandmother.assert_called_with()
+    
+    @patch('family_tree.member.Member.get_paternal_grandmother', side_effect = [
+        None, 
+        create_fake_member(), 
+        create_fake_member(children =[Member(3, 'Dad', 'Male')]),
+        create_fake_member(children = [
+            Member(3, 'Aunt', 'Female'), 
+            Member(4, 'Dad', 'Male')]), 
+        create_fake_member(children = [ 
+            Member(3, 'Dad', 'Male'), 
+            Member(4, 'Uncle', 'Male'), 
+            Member(5, 'Aunt', 'Female')])
+        ])
+    def test_get_paternal_uncle(self, mock_get_paternal_grandmother):
+
+        #Check if get_paternal_grandmother has been replaced by a Mock object
+        self.assertEqual(isinstance(self.member.get_paternal_grandmother, Mock), True)
+
+        #Check for None value
+        self.assertEqual(self.member.get_paternal_uncle(), [])
+        self.assertEqual(self.member.get_paternal_uncle(), [])
+        self.assertEqual(self.member.get_paternal_uncle(), [])
+        self.assertEqual(self.member.get_paternal_uncle(), [])
+
+        paternal_uncles = self.member.get_paternal_uncle()
+        self.assertEqual(len(paternal_uncles), 1)
+        self.assertEqual(paternal_uncles[0].name, 'Uncle')
+        self.assertEqual(paternal_uncles[0].gender, Gender.male)
+
+        #Check that mock_get_paternal_grandmother was called
+        mock_get_paternal_grandmother.assert_called_with()

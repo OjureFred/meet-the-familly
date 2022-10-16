@@ -70,7 +70,22 @@ class Member:
             return None
         return self.spouse.mother
     
-    def test_get_paternal_aunt(self):
+    def get_paternal_aunt(self):
         grandmother = self.get_paternal_grandmother()
         if not grandmother:
-            return None
+            return []
+        if not grandmother.children:
+            return []
+        return list(filter(lambda x: x.gender == Gender.female, grandmother.children))
+    
+    def get_paternal_uncle(self):
+        self.father = Member(3, 'Dad', 'Male')
+        grandmother = self.get_paternal_grandmother()
+        if not grandmother:
+            return []
+        if not grandmother.children:
+            return []
+        return list(filter(
+            lambda x: x.gender == Gender.male and x.name != self.father.name, grandmother.children
+            )
+        )

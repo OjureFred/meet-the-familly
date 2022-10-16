@@ -39,8 +39,18 @@ children - List<Member>
 
 methods
 =======
-get_paternal_aunt - params: None 
-get_paternal_uncle - params: None
+get_paternal_aunt - params: None ->self.father.mother.children.filter(female)
+     - grandmother is None return []
+     - grandmother is valid but only one child - your father - return []
+     - grandmother is valid, has multiple children but no girls - return []
+     - grandmother is valid, has multiple children Both boys and girls - return [girls]
+
+get_paternal_uncle - params: None -> self.father.mother.children.filter(male)
+    - grandmother is none - return []
+    - grandmother is valid but only one child - your father - return []
+    - grandmother is valid, has multiple children all girls - return []
+    grandmother is valid, has multiple children both boys and girls - return [boys excluding your father]
+    
 get_maternal_aunt - params: None
 get_maternal_aunt - params: None
 get brother_in_law - param: None
