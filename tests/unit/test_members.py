@@ -178,6 +178,7 @@ class TestMember(TestCase):
             Member(5, 'Aunt', 'Female')])
         ])
     def test_get_paternal_uncle(self, mock_get_paternal_grandmother):
+        self.member.father = Member(3, 'Dad', 'Male')
 
         #Check if get_paternal_grandmother has been replaced by a Mock object
         self.assertEqual(isinstance(self.member.get_paternal_grandmother, Mock), True)
@@ -195,3 +196,67 @@ class TestMember(TestCase):
 
         #Check that mock_get_paternal_grandmother was called
         mock_get_paternal_grandmother.assert_called_with()
+
+    @patch('family_tree.member.Member.get_maternal_grandmother', side_effect = [
+        None, 
+        create_fake_member(), 
+        create_fake_member(children =[Member(3, 'Mom', 'Female')]),
+        create_fake_member(children = [
+            Member(3, 'Mom', 'Female'), 
+            Member(4, 'Uncle', 'Male')]), 
+        create_fake_member(children = [ 
+            Member(3, 'Mom', 'Female'), 
+            Member(4, 'Uncle', 'Male'), 
+            Member(5, 'Aunt', 'Female')])
+        ])
+    def test_get_maternal_aunt(self, mock_get_maternal_grandmother):
+        self.member.mother = Member(3, 'Mom', 'Female')
+
+        #Check if get_paternal_grandmother has been replaced by a Mock object
+        self.assertEqual(isinstance(self.member.get_maternal_grandmother, Mock), True)
+
+        #Check for None value
+        self.assertEqual(self.member.get_maternal_aunt(), [])
+        self.assertEqual(self.member.get_maternal_aunt(), [])
+        self.assertEqual(self.member.get_maternal_aunt(), [])
+        self.assertEqual(self.member.get_maternal_aunt(), [])
+
+        maternal_aunts = self.member.get_maternal_aunt()
+        self.assertEqual(len(maternal_aunts), 1)
+        self.assertEqual(maternal_aunts[0].name, 'Aunt')
+        self.assertEqual(maternal_aunts[0].gender, Gender.female)
+
+        #Check that mock_get_paternal_grandmother was called
+        mock_get_maternal_grandmother.assert_called_with()
+
+    @patch('family_tree.member.Member.get_maternal_grandmother', side_effect = [
+        None, 
+        create_fake_member(), 
+        create_fake_member(children =[Member(3, 'Mom', 'Female')]),
+        create_fake_member(children = [
+            Member(3, 'Aunt', 'Female'), 
+            Member(4, 'Mom', 'Female')]), 
+        create_fake_member(children = [ 
+            Member(3, 'Mom', 'Female'), 
+            Member(4, 'Uncle', 'Male'), 
+            Member(5, 'Aunt', 'Female')])
+        ])
+    def test_get_maternal_uncle(self, mock_get_maternal_grandmother):
+        self.member.mother = Member(3, 'Mom', 'Female')
+
+        #Check if get_paternal_grandmother has been replaced by a Mock object
+        self.assertEqual(isinstance(self.member.get_maternal_grandmother, Mock), True)
+
+        #Check for None value
+        self.assertEqual(self.member.get_maternal_uncle(), [])
+        self.assertEqual(self.member.get_maternal_uncle(), [])
+        self.assertEqual(self.member.get_maternal_uncle(), [])
+        self.assertEqual(self.member.get_maternal_uncle(), [])
+
+        maternal_uncles = self.member.get_maternal_uncle()
+        self.assertEqual(len(maternal_uncles), 1)
+        self.assertEqual(maternal_uncles[0].name, 'Uncle')
+        self.assertEqual(maternal_uncles[0].gender, Gender.male)
+
+        #Check that mock_get_paternal_grandmother was called
+        mock_get_maternal_grandmother.assert_called_with()
