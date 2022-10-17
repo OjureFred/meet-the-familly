@@ -275,16 +275,16 @@ class TestMember(TestCase):
             Member(5, 'Daughter', 'Female'),
         ]),
     ])
-    def test_get_brother_law(self, mock_get_spouse_mother):
+    def test_get_brother_in_law(self, mock_get_spouse_mother):
         self.member.spouse = Member(3, 'Spouse', 'Female')
         self.assertEqual(isinstance(self.member.get_spouse_mother, Mock), True)
 
-        self.assertEqual(self.member.get_brother_law(), [])
-        self.assertEqual(self.member.get_brother_law(), [])
-        self.assertEqual(self.member.get_brother_law(), [])
-        self.assertEqual(self.member.get_brother_law(), [])
+        self.assertEqual(self.member.get_brother_in_law(), [])
+        self.assertEqual(self.member.get_brother_in_law(), [])
+        self.assertEqual(self.member.get_brother_in_law(), [])
+        self.assertEqual(self.member.get_brother_in_law(), [])
 
-        spouse_brothers = self.member.get_brother_law()
+        spouse_brothers = self.member.get_brother_in_law()
         self.assertEqual(len(spouse_brothers), 1)
         self.assertEqual(spouse_brothers[0].name, 'Son')
         self.assertEqual(spouse_brothers[0].gender, Gender.male)
@@ -306,16 +306,16 @@ class TestMember(TestCase):
             Member(5, 'Daughter', 'Female'),
         ]),
     ])
-    def test_get_sister_law(self, mock_get_spouse_mother):
+    def test_get_sister_in_law(self, mock_get_spouse_mother):
         self.member.spouse = Member(3, 'Spouse', 'Female')
         self.assertEqual(isinstance(self.member.get_spouse_mother, Mock), True)
 
-        self.assertEqual(self.member.get_sister_law(), [])
-        self.assertEqual(self.member.get_sister_law(), [])
-        self.assertEqual(self.member.get_sister_law(), [])
-        self.assertEqual(self.member.get_sister_law(), [])
+        self.assertEqual(self.member.get_sister_in_law(), [])
+        self.assertEqual(self.member.get_sister_in_law(), [])
+        self.assertEqual(self.member.get_sister_in_law(), [])
+        self.assertEqual(self.member.get_sister_in_law(), [])
 
-        spouse_sisters = self.member.get_sister_law()
+        spouse_sisters = self.member.get_sister_in_law()
         self.assertEqual(len(spouse_sisters), 1)
         self.assertEqual(spouse_sisters[0].name, 'Daughter')
         self.assertEqual(spouse_sisters[0].gender, Gender.female)
@@ -364,3 +364,45 @@ class TestMember(TestCase):
         member.mother = mother
         siblings = member.get_siblings()
         self.assertEqual(len(siblings), 2)
+    
+    @patch('family_tree.member.Member.get_siblings')
+    @patch('family_tree.member.Member.get_daughter')
+    @patch('family_tree.member.Member.get_son')
+    @patch('family_tree.member.Member.get_sister_in_law')
+    @patch('family_tree.member.Member.get_brother_in_law')
+    @patch('family_tree.member.Member.get_maternal_uncle')
+    @patch('family_tree.member.Member.get_maternal_aunt')
+    @patch('family_tree.member.Member.get_paternal_uncle')
+    @patch('family_tree.member.Member.get_paternal_aunt')
+    def test_get_relationship(self, mock_get_paternal_aunt, mock_get_paternal_uncle, mock_get_maternal_aunt,
+            mock_get_maternal_uncle, mock_get_brother_in_law, mock_get_sister_in_law, mock_get_son, mock_get_daughter,
+            mock_get_siblings):
+        
+        self.assertEqual(self.member.get_relationship('invalid_relation'), [])
+
+        self.member.get_relationship('paternal_aunt')
+        mock_get_paternal_aunt.assert_called_with()
+
+        self.member.get_relationship('paternal_uncle')
+        mock_get_paternal_uncle.assert_called_with()
+
+        self.member.get_relationship('maternal_aunt')
+        mock_get_maternal_aunt.assert_called_with()
+
+        self.member.get_relationship('maternal_uncle')
+        mock_get_maternal_uncle.assert_called_with()
+
+        self.member.get_relationship('brother_in_law')
+        mock_get_brother_in_law.assert_called_with()
+
+        self.member.get_relationship('sister_in_law')
+        mock_get_sister_in_law.assert_called_with()
+
+        self.member.get_relationship('son')
+        mock_get_son.assert_called_with()
+
+        self.member.get_relationship('daughter')
+        mock_get_daughter.assert_called_with()
+
+        self.member.get_relationship('siblings')
+        mock_get_siblings.assert_called_with()
