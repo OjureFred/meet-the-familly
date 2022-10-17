@@ -322,3 +322,45 @@ class TestMember(TestCase):
 
         #Check that mock_get_paternal_grandmother was called
         mock_get_spouse_mother.assert_called_with()
+    
+    def test_get_son(self):
+        member = Member(5, 'Dummy', 'Male')
+        son = Member(6, 'Son', 'Male')
+        daughter = Member(7, 'Daughter', 'Female')
+
+        self.assertEqual(member.get_son(), [])
+        member.children.append(daughter)
+        self.assertEqual(member.get_son(), [])
+        member.children.append(son)
+        sons = member.get_son()
+        self.assertEqual(len(sons), 1)
+        self.assertEqual(sons[0].name, 'Son')
+        self.assertEqual(sons[0].gender, Gender.male)
+    
+    def test_get_daughter(self):
+        member = Member(5, 'Dummy', 'Male')
+        son = Member(6, 'Son', 'Male')
+        daughter = Member(7, 'Daughter', 'Female')
+
+        self.assertEqual(member.get_daughter(), [])
+        member.children.append(son)
+        self.assertEqual(member.get_daughter(), [])
+        member.children.append(daughter)
+        daughters = member.get_daughter()
+        self.assertEqual(len(daughters), 1)
+        self.assertEqual(daughters[0].name, 'Daughter')
+        self.assertEqual(daughters[0].gender,  Gender.female)
+
+    def test_get_siblings(self):
+        member = Member(5, 'Dummy', 'Male')
+        mother = Member(6, 'Mother', 'Female')
+        son = Member(7, 'Son', 'Male')
+        daughter = Member(8, 'Daughter', 'Female')
+
+        self.assertEqual(member.get_siblings(), [])
+        member.mother = mother
+        self.assertEqual(member.get_siblings(), [])
+        mother.children.extend([member, son, daughter])
+        member.mother = mother
+        siblings = member.get_siblings()
+        self.assertEqual(len(siblings), 2)

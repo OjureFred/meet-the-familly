@@ -53,10 +53,30 @@ get_paternal_uncle - params: None -> self.father.mother.children.filter(male)
     
 get_maternal_aunt - params: None
 get_maternal_aunt - params: None
-get brother_in_law - param: None
-get_sister_in_law - params: None
+
+get brother_in_law - param: None -> self.spouse.mother.children.filter(male)
+    - spouse mother is None - return []
+    - spouse mother is valid but has only one child, our spouse. Return []
+    - spouse mother is valid and has multiple children all girls. Return []
+    - spouse mother is valid and has multiple children both boys and girls. Return [boys]
+
+get_sister_in_law - params: None -> self.spouse.mother.children.filter(male)
+    - spouse mother is None - return []
+    - spouse mother is valid but has only one child, our spouse. Return []
+    - spouse mother is valid and has multiple children all boys. Return []
+    - spouse mother is valid and has multiple children both boys and girls. Return [boys]
+
 get_son - params: None
+    - self.children is None - return []
+    - self.children is all girls - return []
+    - self.children has both boys and girls - return [boys]
+
 get_daughter - params: None
+    - self.children is None - return []
+    - self.children is all girls - return []
+    - self.children has both boys and girls - return [boys]
+
+
 get_siblings - params: None
 
 get_relationship - params: String relationship_type

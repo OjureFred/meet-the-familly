@@ -132,3 +132,20 @@ class Member:
             filter(
                 lambda x: x.gender == Gender.female and x.name != self.spouse.name,  spouse_mother.children)
         )
+
+    def get_son(self):
+        if not self.children:
+            return []
+        return list(filter(lambda x: x.gender == Gender.male, self.children))
+    
+    def get_daughter(self):
+        if not self.children:
+            return []
+        return list(filter(lambda x: x.gender == Gender.female, self.children))
+    
+    def get_siblings(self):
+        if not self.mother:
+            return []
+        if not self.mother.children:
+            return []
+        return list(filter(lambda x:x.name!= self.name, self.mother.children))
