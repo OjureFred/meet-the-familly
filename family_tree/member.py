@@ -108,3 +108,27 @@ class Member:
             lambda x: x.gender == Gender.male, grandmother.children
             )
         )
+    
+    def get_brother_law(self):
+        spouse_mother = self.get_spouse_mother()
+        
+        if not spouse_mother:
+            return []
+        if not spouse_mother.children:
+            return []
+        return list(
+            filter(
+                lambda x: x.gender == Gender.male and x.name != self.spouse.name,  spouse_mother.children)
+        )
+    
+    def get_sister_law(self):
+        spouse_mother = self.get_spouse_mother()
+        
+        if not spouse_mother:
+            return []
+        if not spouse_mother.children:
+            return []
+        return list(
+            filter(
+                lambda x: x.gender == Gender.female and x.name != self.spouse.name,  spouse_mother.children)
+        )

@@ -260,3 +260,65 @@ class TestMember(TestCase):
 
         #Check that mock_get_paternal_grandmother was called
         mock_get_maternal_grandmother.assert_called_with()
+    
+    @patch('family_tree.member.Member.get_spouse_mother', side_effect = [
+        None,
+        create_fake_member(),
+        create_fake_member(children = [Member(3, 'Spouse', 'Female')]),
+        create_fake_member(children = [
+            Member(3, 'Spouse', 'Female'),
+            Member(4, 'Daughter', 'Female'),
+        ]),
+        create_fake_member(children = [
+            Member(3, 'Spouse', 'Female'),
+            Member(4, 'Son', 'Male'),
+            Member(5, 'Daughter', 'Female'),
+        ]),
+    ])
+    def test_get_brother_law(self, mock_get_spouse_mother):
+        self.member.spouse = Member(3, 'Spouse', 'Female')
+        self.assertEqual(isinstance(self.member.get_spouse_mother, Mock), True)
+
+        self.assertEqual(self.member.get_brother_law(), [])
+        self.assertEqual(self.member.get_brother_law(), [])
+        self.assertEqual(self.member.get_brother_law(), [])
+        self.assertEqual(self.member.get_brother_law(), [])
+
+        spouse_brothers = self.member.get_brother_law()
+        self.assertEqual(len(spouse_brothers), 1)
+        self.assertEqual(spouse_brothers[0].name, 'Son')
+        self.assertEqual(spouse_brothers[0].gender, Gender.male)
+
+        #Check that mock_get_paternal_grandmother was called
+        mock_get_spouse_mother.assert_called_with()
+    
+    @patch('family_tree.member.Member.get_spouse_mother', side_effect = [
+        None,
+        create_fake_member(),
+        create_fake_member(children = [Member(3, 'Spouse', 'Female')]),
+        create_fake_member(children = [
+            Member(3, 'Spouse', 'Female'),
+            Member(4, 'Son', 'Male'),
+        ]),
+        create_fake_member(children = [
+            Member(3, 'Spouse', 'Female'),
+            Member(4, 'Son', 'Male'),
+            Member(5, 'Daughter', 'Female'),
+        ]),
+    ])
+    def test_get_sister_law(self, mock_get_spouse_mother):
+        self.member.spouse = Member(3, 'Spouse', 'Female')
+        self.assertEqual(isinstance(self.member.get_spouse_mother, Mock), True)
+
+        self.assertEqual(self.member.get_sister_law(), [])
+        self.assertEqual(self.member.get_sister_law(), [])
+        self.assertEqual(self.member.get_sister_law(), [])
+        self.assertEqual(self.member.get_sister_law(), [])
+
+        spouse_sisters = self.member.get_sister_law()
+        self.assertEqual(len(spouse_sisters), 1)
+        self.assertEqual(spouse_sisters[0].name, 'Daughter')
+        self.assertEqual(spouse_sisters[0].gender, Gender.female)
+
+        #Check that mock_get_paternal_grandmother was called
+        mock_get_spouse_mother.assert_called_with()
