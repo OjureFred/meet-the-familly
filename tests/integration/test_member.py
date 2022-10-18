@@ -49,6 +49,7 @@ class TestMember(TestCase):
 
         #Add spouse
         self.member.set_spouse(self.spouse)
+        self.spouse.set_spouse(self.member)
 
         #Add our paternal aunts and uncles
         self.paternal_grandmother.add_child(self.fathers_sister_a)
@@ -109,3 +110,14 @@ class TestMember(TestCase):
         self.assertEqual(self.fathers_brother_b in self.member.father.mother.children, True)
         self.assertEqual(self.fathers_sister_a in self.member.father.mother.children, True)
         self.assertEqual(self.fathers_sister_a in self.member.father.mother.children, True)
+    
+    def test_get_relationship_methods(self):
+        self.assertEqual(len(self.member.get_relationship('paternal_aunt')), 2)
+        self.assertEqual(len(self.member.get_relationship('paternal_uncle')), 2)
+        self.assertEqual(len(self.member.get_relationship('maternal_aunt')), 2)
+        self.assertEqual(len(self.member.get_relationship('maternal_uncle')), 2)
+        self.assertEqual(len(self.member.get_relationship('siblings')), 4)
+        self.assertEqual(len(self.member.get_relationship('son')), 2)
+        self.assertEqual(len(self.member.get_relationship('daughter')), 2)
+        self.assertEqual(len(self.member.spouse.get_relationship('brother_in_law')), 2)
+        self.assertEqual(len(self.member.spouse.get_relationship('sister_in_law')), 2)
