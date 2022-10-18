@@ -27,8 +27,10 @@ class TestMember(TestCase):
         self.daughter_b = Member(20, 'DaughterB', 'Female')
         self.paternal_grandmother = Member(21, 'PaternalGrandmother', 'Female')
         self.maternal_grandmother = Member(22, 'MaternalGrandmother', 'Female')
-    
-    def test_setter_methods(self):
+
+
+        #setup relationships
+
         #adding our parents
         self.member.set_mother(self.mother)
         self.member.set_father(self.father)
@@ -70,10 +72,40 @@ class TestMember(TestCase):
         self.member.add_child(self.daughter_a)
         self.member.add_child(self.daughter_b)
 
+
+
+    
+    def test_setter_methods(self):
+        
         #Test parents
         self.assertEqual(self.member.mother.name, 'Mother')
         self.assertEqual(self.member.father.name, 'Dad')
         self.assertEqual(self.member in self.member.father.children, True)
         self.assertEqual(self.member in self.member.mother.children, True)
 
-    
+        #Test siblings
+        self.assertEqual(len(self.member.mother.children), 5)
+        self.assertEqual(self.brother_a in self.member.mother.children, True)
+        self.assertEqual(self.brother_b in self.member.mother.children, True)
+        self.assertEqual(self.sister_a in self.member.mother.children, True)
+        self.assertEqual(self.sister_a in self.member.mother.children, True)
+        self.assertEqual(len(self.member.mother.children), 5)
+        self.assertEqual(self.brother_a in self.member.father.children, True)
+        self.assertEqual(self.brother_b in self.member.father.children, True)
+        self.assertEqual(self.sister_a in self.member.father.children, True)
+        self.assertEqual(self.sister_a in self.member.father.children, True)
+
+        #Test spouse
+        self.assertEqual(self.member.spouse.name, 'Wife')
+
+        #Test both paternal and maternal aunts and uncles
+        self.assertEqual(len(self.member.mother.mother.children), 5)
+        self.assertEqual(self.mothers_brother_a in self.member.mother.mother.children, True)
+        self.assertEqual(self.mothers_brother_b in self.member.mother.mother.children, True)
+        self.assertEqual(self.mothers_sister_a in self.member.mother.mother.children, True)
+        self.assertEqual(self.mothers_sister_a in self.member.mother.mother.children, True)
+        self.assertEqual(len(self.member.father.mother.children), 5)
+        self.assertEqual(self.fathers_brother_a in self.member.father.mother.children, True)
+        self.assertEqual(self.fathers_brother_b in self.member.father.mother.children, True)
+        self.assertEqual(self.fathers_sister_a in self.member.father.mother.children, True)
+        self.assertEqual(self.fathers_sister_a in self.member.father.mother.children, True)
