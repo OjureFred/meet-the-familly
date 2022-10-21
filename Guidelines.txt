@@ -88,6 +88,28 @@ family_tree - Dictionary
 
 Methods 
 ======= 
+constructor - params: None
+
 add_child - params: String name, String gender, String mother_name
+    - create Member
+    - if family_tree is empty
+        - add Member
+        - return CHILD_ADDITION_SUCCEEDED
+    
+    - if family_tree is not empty
+        - mother should be entity
+        - if not mother:
+            - return PERSON_NOT_FOUND
+        - mother spouse(father) should be entity 
+        - if not mother.spouse
+            - return CHILD_ADDITION__FAILED
+        
+        if both mother and father exists:
+            - add child for both mother and father
+            - set_mother for member 
+            - set_father for Member
+            - return CHILD_ADDITION_SUCCEEDED
+
+
 add_spouse - params: String name, String gender, String spouse_name 
 get_relationship - params: String name, String relationship_type
