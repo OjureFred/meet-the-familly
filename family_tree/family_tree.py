@@ -1,4 +1,4 @@
-from family_tree.member import Member
+from family_tree.member import Member, Gender
 
 class FamilyTree:
 
@@ -11,14 +11,16 @@ class FamilyTree:
         if not self.family_tree:
             self.family_tree[name] = member
             return 'CHILD_ADDITION_SUCCEEDED'
-        if not self.family_tree.get(mother_name, None):
-            return 'PERSON_NOT_FOUND'
-        if not self.family_tree[mother_name].spouse:
+        
+        if name in self.family_tree:
             return 'CHILD_ADDITION_FAILED'
         
         mother = self.family_tree.get(mother_name, None)
         if not mother:
             return 'PERSON_NOT_FOUND'
+        
+        if  mother.gender != Gender.female:
+            return 'CHILD_ADDITION_FAILED'
         
         father = mother.spouse
         if not father:
@@ -27,6 +29,6 @@ class FamilyTree:
         member.set_mother(mother)
         member.set_father(father)
         self.family_tree[mother_name].add_child(member)
-        self.family_tree[father_name].add_child(member)
+        self.family_tree[father].add_child(member)
         self.family_tree[name] = member
         return 'CHILD_ADDITION_SUCCEEDED'

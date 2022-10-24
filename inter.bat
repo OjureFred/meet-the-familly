@@ -1,0 +1,1 @@
+python -m unittest discover -s "./tests/integration/" -p "test_*.py"

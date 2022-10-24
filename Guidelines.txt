@@ -97,6 +97,8 @@ add_child - params: String name, String gender, String mother_name
         - return CHILD_ADDITION_SUCCEEDED
     
     - if family_tree is not empty
+        - if member already exists
+            - return CHILD_ADDITION__FAILED
         - mother should be entity
         - if not mother:
             - return PERSON_NOT_FOUND
