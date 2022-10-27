@@ -60,3 +60,15 @@ class FamilyTree:
             return 'SPOUSE_ADDITION_SUCCEEDED'
         except valueError:
             return 'SPOUSE_ADDITION_FAILED'
+    
+    def get_relationship(self, name, relationship_type):
+        member = self.family_tree.get(name, None)
+        if not member:
+            return 'PERSON_NOT_FOUND'
+        result = member.get_relationship(relationship_type)
+        if not result:
+            return 'NONE'
+        else:
+            return list (
+                map(lambda x: x.name, sorted(result, key= lambda key: key.id))
+            )

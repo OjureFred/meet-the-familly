@@ -41,4 +41,19 @@ class TestFamilyTree(TestCase):
         self.assertEqual(self.ftree.add_spouse('Wife', 'Female', 'AlreadyMarried'), 'SPOUSE_ADDITION_FAILED')
         self.assertEqual(self.ftree.add_spouse('Wife', 'Female', 'Zim'), 'SPOUSE_ADDITION_SUCCEEDED')
         self.assertEqual(self.ftree.add_spouse('Wife', 'Female', 'Zim'), 'SPOUSE_ADDITION_FAILED')
-
+    
+    def test_get_relationship(self):
+        self.assertEqual(self.ftree.get_relationship('Zim', 'borother_in_law'), 'PERSON_NOT_FOUND')
+        member = Member(1, 'Zim',  'Male')
+        son_a = Member(2, 'SonA', 'Male')
+        son_b = Member(3, 'SonB', 'Male')
+        member.add_child(son_b)
+        member.add_child(son_a)
+        son_a.set_father(member)
+        son_b.set_father(member)
+        self.ftree.family_tree['Zim'] = member
+        self.ftree.family_tree['SonA'] = son_a
+        self.ftree.family_tree['SonB'] = son_b
+        self.assertEqual(self.ftree.get_relationship('Zim', 'daughter'), 'NONE')
+        self.assertEqual(self.ftree.get_relationship('Zim', 'son'), ['SonA', 'SonB'])
+ 
