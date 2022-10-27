@@ -112,6 +112,31 @@ add_child - params: String name, String gender, String mother_name
             - set_father for Member
             - return CHILD_ADDITION_SUCCEEDED
 
-
 add_spouse - params: String name, String gender, String spouse_name 
+    - create member
+    - if family_tree is empty:
+        - return SPOUSE_ADDITION_FAILED
+    if family_tree is not empty:
+        - if member already exists:
+            - return SPOUSE_ADDITION_FAILED
+        - spouse should be a valid entry
+        - if not spouse:
+            - return PERSON_NOT_FOUND
+        - if spouse.gender == member.gender:
+            return SPOUSE_ADDITION_FAILED
+        - if spouse already married:
+            - return SPOUSE_ADDITION_FAILED
+        - if all conditions match:
+            - set spouse for member
+            - set_spouse for spouse
+            - create an entry for spouse
+            - return SPOUSE_ADDITION_SUCCEEDED
+            
 get_relationship - params: String name, String relationship_type
+    - if not member
+        return PERSON_NOT_FOUND
+    result = member.get_relationship
+    if not result:
+        return NONE
+    else
+        return ''.join(sort_based_on_id)
