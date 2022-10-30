@@ -1,0 +1,35 @@
+Geektrust
+
+data_member
+------------
+
+methods
+------------
+
+construct_add_child_method_call - params: String name, String gender, String mother_name
+construct_add_spouse_method_call - params: String name, String gender, String spouse_name
+construct_get_relationship_method_call - params: String name, String relationship_type
+
+translate - params: String filename
+    - readlines from filename
+    - return list of commands in strings
+
+    CONVERT:
+    - ADD_CHILD Mother Name Gender => 'self.family_tree.add_child("name", "gender", "mother")
+    - ADD_SPOUSE Spouse Name Gender => 'self.familty_tree.add_spouse("Name", "gender", "spouse")
+    - GET_RELATIONSHIP Name Relationship_Type => 'self.family_tree.get_relationship("name", "relationship_type")
+    
+execute - params: List commands
+    - eval each command and store the result
+    - return result
+log - params: List result
+    - print the results on the console 
+setup - params: None
+    - call translate with setup file 
+    - execute the results 
+
+FamilyTree
+-----------
+add_child -> return 'CHILD_ADDITION_SUCCEEDED'
+add_spouse -> return 'SPOUSE_ADDITION_SUCCEEDED'
+get_relationship -> return 'N R'
