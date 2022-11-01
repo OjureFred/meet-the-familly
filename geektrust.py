@@ -20,6 +20,13 @@ class Geektrust:
         self.family_tree = FamilyTree()
     
     def construct_add_child_method_call(self, *args):
+        if len(args) > 3 or len(args) < 2:
+            return None
+        if len(args) == 2:
+            return 'self.family_tree.add_child("{}", "{}")'.format(
+                args[0],
+                args[1]
+            )
         return 'self.family_tree.add_child("{}", "{}", "{}")'.format(
             args[1],
             args[2],
@@ -27,13 +34,17 @@ class Geektrust:
         )
     
     def construct_add_spouse_method_call(self, *args):
-         return 'self.family_tree.add_spouse("{}", "{}", "{}")'.format(
+        if len(args) != 3:
+            return None
+        return 'self.family_tree.add_spouse("{}", "{}", "{}")'.format(
             args[1],
             args[2],
             args[0]
         )
     
     def construct_get_relationship_method_call(self, *args):
+        if len(args) != 2:
+            return None
         switch_relationship = {
             'Paternal_Aunt': 'paternal_aunt',
             'Paternal_Uncle': 'paternal_uncle',

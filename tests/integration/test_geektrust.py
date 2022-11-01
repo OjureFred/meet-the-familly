@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest.mock import patch
-from family_tree.geektrust import Geektrust
+from geektrust import Geektrust
 
 class TestGeekTrust(TestCase):
 
