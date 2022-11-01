@@ -1,142 +1,35 @@
-CHILD ADDITON
-1. Cannot have duplicate names -> CHILD_ADDITION__FAILED
-2. If a tree is empty add -> CHILD_ADDITION_SUCCEEDED
-3. Cannot be added through father -> CHILD_ADDITION__FAILED
-4. Both father and mother need to exist -> PERSON_NOT_FOUND
-5. All cases succesful -> CHILD_ADDITION_SUCCEEDED
+Geektrust
 
-SPOUSE ADDITION 
-1. Cannot have duplicate name -> SPOUSE_ADDITION_FAILED
-2. Cannot be added if tree is empty -> SPOUSE_ADDITION_FAILED
-3. Spouse needs to exist -> PERSON_NOT_FOUND
-4. Spouse gender need to be opposite -> SPOUSE_ADDITION_FAILED
-5. Spouse cannot have existing spouse -> SPOUSE_ADDITION_FAILED
-
-GET RELATIONSHIP NOTE:
-The names of people in the relationship need to be printed in order of their addition 
-1. Person should exist -> PERSON_NOT_FOUND
-2. Should return non empty list -> NONE
-
-CLASSES
-
-1. GENDER 
-
-data_members
-=============
-male = 'MALE'
-female = 'FEMALE'
-
-2. MEMBER 
-data_members
-=============
-id - Integer
-name - String
-gender - Enum Gender 
-mother - Member 
-father - Member 
-spouse - Member
-children - List<Member>
+data_member
+------------
 
 methods
-=======
-get_paternal_aunt - params: None ->self.father.mother.children.filter(female)
-     - grandmother is None return []
-     - grandmother is valid but only one child - your father - return []
-     - grandmother is valid, has multiple children but no girls - return []
-     - grandmother is valid, has multiple children Both boys and girls - return [girls]
+------------
 
-get_paternal_uncle - params: None -> self.father.mother.children.filter(male)
-    - grandmother is none - return []
-    - grandmother is valid but only one child - your father - return []
-    - grandmother is valid, has multiple children all girls - return []
-    grandmother is valid, has multiple children both boys and girls - return [boys excluding your father]
+construct_add_child_method_call - params: String name, String gender, String mother_name
+construct_add_spouse_method_call - params: String name, String gender, String spouse_name
+construct_get_relationship_method_call - params: String name, String relationship_type
+
+translate - params: String filename
+    - readlines from filename
+    - return list of commands in strings
+
+    CONVERT:
+    - ADD_CHILD Mother Name Gender => 'self.family_tree.add_child("name", "gender", "mother")
+    - ADD_SPOUSE Spouse Name Gender => 'self.familty_tree.add_spouse("Name", "gender", "spouse")
+    - GET_RELATIONSHIP Name Relationship_Type => 'self.family_tree.get_relationship("name", "relationship_type")
     
-get_maternal_aunt - params: None
-get_maternal_aunt - params: None
+execute - params: List commands
+    - eval each command and store the result
+    - return result
+log - params: List result
+    - print the results on the console 
+setup - params: None
+    - call translate with setup file 
+    - execute the results 
 
-get brother_in_law - param: None -> self.spouse.mother.children.filter(male)
-    - spouse mother is None - return []
-    - spouse mother is valid but has only one child, our spouse. Return []
-    - spouse mother is valid and has multiple children all girls. Return []
-    - spouse mother is valid and has multiple children both boys and girls. Return [boys]
-
-get_sister_in_law - params: None -> self.spouse.mother.children.filter(male)
-    - spouse mother is None - return []
-    - spouse mother is valid but has only one child, our spouse. Return []
-    - spouse mother is valid and has multiple children all boys. Return []
-    - spouse mother is valid and has multiple children both boys and girls. Return [boys]
-
-get_son - params: None
-    - self.children is None - return []
-    - self.children is all girls - return []
-    - self.children has both boys and girls - return [boys]
-
-get_daughter - params: None
-    - self.children is None - return []
-    - self.children is all girls - return []
-    - self.children has both boys and girls - return [boys]
-
-
-get_siblings - params: None
-
-get_relationship - params: String relationship_type
-
-3. FAMILY TREE 
-data_members
-============
-family_tree - Dictionary
-
-Methods 
-======= 
-constructor - params: None
-
-add_child - params: String name, String gender, String mother_name
-    - create Member
-    - if family_tree is empty
-        - add Member
-        - return CHILD_ADDITION_SUCCEEDED
-    
-    - if family_tree is not empty
-        - if member already exists
-            - return CHILD_ADDITION__FAILED
-        - mother should be entity
-        - if not mother:
-            - return PERSON_NOT_FOUND
-        - mother spouse(father) should be entity 
-        - if not mother.spouse
-            - return CHILD_ADDITION__FAILED
-        
-        if both mother and father exists:
-            - add child for both mother and father
-            - set_mother for member 
-            - set_father for Member
-            - return CHILD_ADDITION_SUCCEEDED
-
-add_spouse - params: String name, String gender, String spouse_name 
-    - create member
-    - if family_tree is empty:
-        - return SPOUSE_ADDITION_FAILED
-    if family_tree is not empty:
-        - if member already exists:
-            - return SPOUSE_ADDITION_FAILED
-        - spouse should be a valid entry
-        - if not spouse:
-            - return PERSON_NOT_FOUND
-        - if spouse.gender == member.gender:
-            return SPOUSE_ADDITION_FAILED
-        - if spouse already married:
-            - return SPOUSE_ADDITION_FAILED
-        - if all conditions match:
-            - set spouse for member
-            - set_spouse for spouse
-            - create an entry for spouse
-            - return SPOUSE_ADDITION_SUCCEEDED
-            
-get_relationship - params: String name, String relationship_type
-    - if not member
-        return PERSON_NOT_FOUND
-    result = member.get_relationship
-    if not result:
-        return NONE
-    else
-        return ''.join(sort_based_on_id)
+FamilyTree
+-----------
+add_child -> return 'CHILD_ADDITION_SUCCEEDED'
+add_spouse -> return 'SPOUSE_ADDITION_SUCCEEDED'
+get_relationship -> return 'N R'
