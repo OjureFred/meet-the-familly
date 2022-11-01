@@ -81,6 +81,23 @@ class Geektrust:
                 if not construct_method:
                     continue
                 construct_method(*tuple(tokens[1:]))
+    
+    def execute(self, instructions):
+        results = []
+        for instruction in instructions:
+            result = eval(instruction)
+            if not result:
+                continue
+            results.append(result)
+        return results
+    
+    def log(self, results):
+        for result in results:
+            print(result)
+    
+    def setup(self, filename):
+        commands = self.translate(filename)
+        self.execute(commands)
 
 
 if __name__ == '__main__':

@@ -48,3 +48,31 @@ class TestGeekTrust(TestCase):
             #         'self.family_tree.get_relationship("Member", "Brother_in_law")'
             #     ]
             # )
+
+    @patch('geektrust.FamilyTree.get_relationship', return_value = 'NONE')
+    @patch('geektrust.FamilyTree.add_spouse', return_value = "SPOUSE_ADDITION_SUCCEEDED")
+    @patch('geektrust.FamilyTree.add_child', return_value = "CHILD_ADDITION_SUCCEEDED")
+    def test_execute(self, mock_add_child, mock_add_spouse, mock_get_relationship):
+        results = self.geektrust_app.execute(
+            [
+                'self.family_tree.add_child("Member", "Male", "Mother")',
+                'self.family_tree.add_spouse("Wife", "Female", "Spouse")',
+                'self.family_tree.get_relationship("Member", "brother_in_law")'
+            ]
+        )
+        self.assertEqual(results, ["CHILD_ADDITION_SUCCEEDED", "SPOUSE_ADDITION_SUCCEEDED", "NONE"])
+        mock_add_child.assert_called_with("Member", "Male", "Mother")
+        mock_add_spouse.assert_called_with("Wife", "Female", "Spouse")
+        mock_get_relationship.assert_called_with("Member", "brother_in_law")
+    
+    @patch('builtins.print')
+    def test_log(self, mock_print):
+        self.geektrust_app.log(["CHILD_ADDITION_SUCCEEDED", "SPOUSE_ADDITION_SUCCEEDED", "NONE"])
+        mock_print.assert_called_with("NONE")
+    
+    @patch('geektrust.Geektrust.execute')
+    @patch('geektrust.Geektrust.translate', return_value = ['RESULT'])
+    def test_setup(self, mock_translate, mock_execute):
+        self.geektrust_app.setup('filename')
+        mock_translate.assert_called_with('filename')
+        mock_execute.assert_called_with(['RESULT'])
