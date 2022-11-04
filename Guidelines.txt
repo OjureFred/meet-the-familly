@@ -68,6 +68,7 @@ get_maternal_aunt - params: None -> self.mother.mother.children.filter(female)
 get_maternal_uncle - params: None -> self.mother.mother.children.filter(male)
 
 get_brother_in_law - params: None -> self.spouse.mother.children.filter(male)
+    - if not spouse - []
     - spouse mother is None - []
     - spouse mother is valid, but only one child, our spouse - []
     - spouse mother is valid, multiple children, all girls and our spouse- []

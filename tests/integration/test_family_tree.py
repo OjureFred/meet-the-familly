@@ -55,5 +55,5 @@ class TestFamilyTree(TestCase):
         self.ftree.family_tree['SonA'] = son_a
         self.ftree.family_tree['SonB'] = son_b
         self.assertEqual(self.ftree.get_relationship('Zim', 'daughter'), 'NONE')
-        self.assertEqual(self.ftree.get_relationship('Zim', 'son'), ['SonA', 'SonB'])
+        self.assertEqual(self.ftree.get_relationship('Zim', 'son'), 'SonA SonB')
  

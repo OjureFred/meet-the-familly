@@ -84,7 +84,15 @@ class Geektrust:
     def setup(self, filename):
         commands = self.translate(filename)
         self.execute(commands)
+    
+    def main(self, filename):
+        self.setup('./setup.instructions.txt')
+        commands = self.translate(filename)
+        results = self.execute(commands)
+        self.log(results)
 
 
 if __name__ == '__main__':
-    print('Hello Geektrust')
+    geektrust = Geektrust()
+    filename = sys.argv[1]
+    geektrust.main(filename)

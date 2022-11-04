@@ -2,6 +2,7 @@ from unittest import TestCase
 from unittest.mock import patch, Mock
 
 from family_tree.family_tree import FamilyTree, Gender, Member
+from family_tree import constants
 #from tests.unit import create_fake_member
 from tests.unit.create_user import create_fake_member
 
@@ -63,17 +64,20 @@ class TestFamilyTree(TestCase):
         self.ftree.family_tree['FakeMember'] = spouse_b
         self.ftree.family_tree['MarriedMember'] = spouse_c
       
-        self.assertEqual(self.ftree.add_spouse('Wife', Gender.female, 'FakeMember'), 'SPOUSE_ADDITION_SUCCEEDED')
+        self.assertEqual(self.ftree.add_spouse('Wife', Gender.female, 'FakeMember'), 'SPOUSE_ADDITION_FAILED')
         self.assertEqual(self.ftree.add_spouse('Wife', Gender.female, 'MarriedMember'), 'SPOUSE_ADDITION_FAILED')
         self.assertEqual(self.ftree.add_spouse('Wife', Gender.female, 'Zim'), 'SPOUSE_ADDITION_FAILED')
     
     @patch('family_tree.family_tree.Member.get_relationship', side_effect = [
         [],
-        [create_fake_member(id=1, name='Zim'), create_fake_member(id =2, name = 'Wife')]
+        [
+            create_fake_member(id=1, name='Zim'), 
+            create_fake_member(id =2, name = 'Wife')
+        ]
     ])
     def test_get_relationship(self, mock_get_relationship):
-        self.assertEqual(self.ftree.get_relationship('Zim', 'brother_in_law'), 'PERSON_NOT_FOUND')
+        self.assertEqual(self.ftree.get_relationship('Zim', 'brother_in_law'), constants.PERSON_NOT_FOUND)
         self.ftree.family_tree['Zim'] = Member(1, 'Zim', 'Male')
-        self.assertEqual(self.ftree.get_relationship('Zim', 'brother_in_law'), 'NONE')
-        self.assertEqual(self.ftree.get_relationship('Zim', 'brother_in_law'), ['Zim', 'Wife'])
+        self.assertEqual(self.ftree.get_relationship('Zim', 'brother_in_law'), constants.NONE)
+        self.assertEqual(self.ftree.get_relationship('Zim', 'brother_in_law'), 'Zim Wife')
         
